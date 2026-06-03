@@ -1,4 +1,17 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using ProjetoLoginIB.interfaces;
+using ProjetoLoginIB.Repositorio;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Usuario/Logar";
+        options.AccessDeniedPath = "/Usuario/AcessoNegado";
+    });
+
+
+builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -14,6 +27,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//autenticação 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
